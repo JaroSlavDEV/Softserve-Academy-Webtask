@@ -1,0 +1,25 @@
+// font-weight helper:
+
+// 100 Extra Light or Ultra Light;
+// 200 Light or Thin; 300 Book or Demi;
+// 400 Regular or Normal;
+// 500 Medium;
+// 600 Semibold or Demibold;
+// 700 Bold;
+// 800 Black or Extra Bold or Heavy;
+// 900 Extra Black or Fat or Ultra Black
+
+
+@mixin font($f-name, $f-style, $f-weight, $f-url)
+	@font-face
+		font-family: $f-name
+		font-style: $f-style
+		font-weight: $f-weight
+		src: url($f-url) format('woff2')
+
+
+@include font('fcb-light', normal, 200, '../fonts/FC_BARCELONA-Light.woff2')
+@include font('fcb-regular', normal, 400, '../fonts/FC_BARCELONA-Regular.woff2')
+@include font('fcb-semibold', normal, 600, '../fonts/FC_BARCELONA-Semibold.woff2')
+@include font('fcb-bold', normal, 700, '../fonts/FC_BARCELONA-Bold.woff2')
+@include font('fcb-extrabold', normal, 800, '../fonts/FC_BARCELONA-Extrabold.woff2')

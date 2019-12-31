@@ -1,0 +1,196 @@
+@import vars
+@import fonts
+@import libs
+@import media
+
+//General styles//
+
+html
+	font-size: 10px
+
+body
+	font-size: 1.4rem
+	min-width: 320px
+	font-family: fcb-regular, Arial, Helvetica Neue, Helvetica, sans-serif
+	color: $text
+	height: 1500px
+
+.wrapper
+	width: 100%
+	margin-right: auto
+	margin-left: auto
+	padding-right: 15px
+	padding-left: 15px
+
+ul
+	margin: 0
+	padding: 0
+	list-style: none
+
+a
+	color: $text
+	text-decoration: none
+	transition: all 0.5s ease
+
+	&:hover
+		transition: all 1s ease
+
+h1, h2, h3, h4, h5, h6
+	margin: 0
+
+//Header//
+
+.header
+	background: $background
+	position: sticky
+	top: 0
+
+	.wrapper
+		display: flex
+		justify-content: space-between
+		align-items: top
+
+		.navigation
+			.list
+				display: flex
+
+				&__item
+					width: 150px
+					text-align: center
+					height: 75px
+					line-height: 75px
+					border-bottom: .1rem solid #29283d
+					border-left: .1rem solid #29283d
+					transition: all 0.5s ease
+
+					&:last-child
+						border-right: .1rem solid #29283d
+
+					&:hover
+						cursor: pointer
+						background: $accent-red
+
+					.link
+						font-family: fcb-bold, Arial, Helvetica Neue, Helvetica, sans-serif
+						font-size: 1.6rem
+						text-transform: uppercase
+
+		.logo
+			flex-grow: 1
+			height: 75px
+			display: flex
+			justify-content: center
+			align-items: center
+			border-bottom: .1rem solid #29283d
+			border-right: .1rem solid #29283d
+
+			.link
+				display: inline-block
+				width: 200px
+
+			&__image
+				fill: $text
+
+.first-screen
+	height: calc(100vh - 75px)
+	background: url('https://assorted.downloads.oppo.com/static/assets/products/fcb/images/2560/pc_players@3x-ea9946274b3b19eb8b3aa5846262f00a.png') center center /cover
+
+	.background-filter
+		width: 100%
+		height: 100%
+		background: rgba(0, 0, 0, 0.7)
+		display: flex
+		align-items: center
+		justify-content: center
+		flex-direction: column
+
+	&__title
+		font-family: fcb-bold, Arial, Helvetica Neue, Helvetica, sans-serif
+		font-size: 10rem
+		margin-top: -10%
+		margin-bottom: 0
+
+	&__motto
+		font-family: fcb-semibold, Arial, Helvetica Neue, Helvetica, sans-serif
+		font-size: 4rem
+		color: $accent-yellow
+
+.main
+	color: $background
+	
+	.wrapper
+		section
+			padding-top: 100px
+
+		h2
+			font-size: 5rem
+			text-align: center
+			color: $accent-red
+
+		article
+			margin-top: 25px
+			font-size: 2rem
+
+		.history
+			&__timeline
+				margin-top: 75px
+
+				h3
+					font-size: 3rem
+					text-align: center
+					text-transform: uppercase
+
+				&_container
+					position: relative
+					margin: 0 auto
+					margin-top: 50px
+
+					&::after
+						content: ''
+						position: absolute
+						width: 2px
+						background-color: $background
+						top: 0
+						bottom: 0
+						left: 50%
+						margin-left: -1px
+
+				&_point
+					padding: 20px 30px
+					position: relative
+					width: 50%
+					left: 0
+					box-sizing: border-box
+					font-size: 2rem
+					text-align: center
+					border-radius: 75px
+					box-shadow: 0px 0px 30px 0px rgba(24,23,51,0.3)
+						
+					&::after
+						content: ''
+						position: absolute
+						width: 25px
+						height: 25px
+						right: -17px
+						background-color: white
+						border: 3px solid $accent-red
+						top: 50%
+						margin-top: -15.5px
+						border-radius: 50%
+						z-index: 1
+						right: -15.5px
+
+					&-year
+						font-family: fcb-semibold
+
+					&title
+
+					&:nth-child(2n)
+						left: 50%
+
+						&::after
+							left: -17px
+
+		.last-victory
+			&__container
+				
