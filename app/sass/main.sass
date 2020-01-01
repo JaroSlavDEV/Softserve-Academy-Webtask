@@ -3,187 +3,266 @@
 @import libs
 @import media
 
-//General styles//
-
+//General//
 html
 	font-size: 10px
 
 body
-	font-size: 1.4rem
 	min-width: 320px
-	font-family: fcb-regular, Arial, Helvetica Neue, Helvetica, sans-serif
+
 	color: $text
-	height: 1500px
+
+	font-family: fcb-regular, Arial, Helvetica Neue, Helvetica, sans-serif
+	font-size: 1.4rem
 
 .wrapper
 	width: 100%
-	margin-right: auto
-	margin-left: auto
-	padding-right: 15px
-	padding-left: 15px
+	margin: 0 auto
+	padding: 0 15px
 
 ul
 	margin: 0
 	padding: 0
+
 	list-style: none
 
 a
-	color: $text
 	text-decoration: none
-	transition: all 0.5s ease
 
-	&:hover
-		transition: all 1s ease
+	color: $text
 
 h1, h2, h3, h4, h5, h6
 	margin: 0
 
 //Header//
-
 .header
-	background: $background
-	position: sticky
+	position: fixed
+	z-index: 100
 	top: 0
+
+	width: 100%
+	height: 75px
+
+	background: $background
+
+	& + .first-screen
+		padding-top: 75px
 
 	.wrapper
 		display: flex
-		justify-content: space-between
-		align-items: top
 
 		.navigation
 			.list
 				display: flex
 
 				&__item
+					position: relative
+
+					box-sizing: border-box
 					width: 150px
-					text-align: center
 					height: 75px
-					line-height: 75px
+
+					transition: all 0.5s ease
+					text-align: center
+
 					border-bottom: .1rem solid #29283d
 					border-left: .1rem solid #29283d
-					transition: all 0.5s ease
+
+					line-height: 75px
 
 					&:last-child
 						border-right: .1rem solid #29283d
 
 					&:hover
 						cursor: pointer
+
 						background: $accent-red
 
+						.dropdown-list
+							display: block
+
 					.link
-						font-family: fcb-bold, Arial, Helvetica Neue, Helvetica, sans-serif
-						font-size: 1.6rem
 						text-transform: uppercase
 
+						font-family: fcb-bold
+						font-size: 1.6rem
+
+					.dropdown-list
+						position: absolute
+						z-index: 1
+
+						display: none
+
+						min-width: 150%
+
+						background: $background
+
+						&__item
+							position: relative
+
+							transition: all 0.5s ease
+
+							line-height: 50px
+
+							&::after
+								position: absolute
+								top: 0
+								left: 100%
+
+								visibility: hidden
+
+								width: 0
+								height: 0
+
+								content: ''
+								transition: all 0.5s ease
+
+								opacity: 0
+								border-top: 25px solid transparent
+								border-bottom: 25px solid transparent
+								border-left: 25px solid $accent-red
+
+							&:hover
+								background: $accent-red
+
+								&::after
+									visibility: visible
+
+									opacity: 1
+
 		.logo
-			flex-grow: 1
-			height: 75px
 			display: flex
-			justify-content: center
 			align-items: center
-			border-bottom: .1rem solid #29283d
+			flex-grow: 1
+			justify-content: center
+
 			border-right: .1rem solid #29283d
+			border-bottom: .1rem solid #29283d
 
 			.link
-				display: inline-block
-				width: 200px
+				display: flex
 
 			&__image
+				width: 200px
+
 				fill: $text
 
+//First screen
 .first-screen
 	height: calc(100vh - 75px)
+
 	background: url('https://assorted.downloads.oppo.com/static/assets/products/fcb/images/2560/pc_players@3x-ea9946274b3b19eb8b3aa5846262f00a.png') center center /cover
 
 	.background-filter
-		width: 100%
-		height: 100%
-		background: rgba(0, 0, 0, 0.7)
 		display: flex
 		align-items: center
-		justify-content: center
 		flex-direction: column
+		justify-content: center
+
+		width: 100%
+		height: 100%
+
+		background: rgba(0, 0, 0, 0.7)
 
 	&__title
-		font-family: fcb-bold, Arial, Helvetica Neue, Helvetica, sans-serif
-		font-size: 10rem
 		margin-top: -10%
 		margin-bottom: 0
 
+		font-family: fcb-bold
+		font-size: 10rem
+
 	&__motto
-		font-family: fcb-semibold, Arial, Helvetica Neue, Helvetica, sans-serif
-		font-size: 4rem
 		color: $accent-yellow
 
+		font-family: fcb-semibold
+		font-size: 4rem
+
+//Content
 .main
+	padding: 100px 0 125px
+
 	color: $background
-	
+
 	.wrapper
-		section
+		.section
 			padding-top: 100px
 
-		h2
-			font-size: 5rem
-			text-align: center
-			color: $accent-red
+			.section__title
+				text-align: center
 
-		article
-			margin-top: 25px
-			font-size: 2rem
+				color: $accent-red
+
+				font-size: 5rem
 
 		.history
+			padding-top: 0
+
+			&__founding
+				margin-top: 25px
+
+				font-size: 2rem
+
 			&__timeline
 				margin-top: 75px
 
-				h3
-					font-size: 3rem
+				&_title
 					text-align: center
 					text-transform: uppercase
 
+					font-size: 3rem
+
 				&_container
 					position: relative
+
 					margin: 0 auto
 					margin-top: 50px
 
 					&::after
-						content: ''
 						position: absolute
-						width: 2px
-						background-color: $background
 						top: 0
 						bottom: 0
 						left: 50%
+
+						width: 2px
 						margin-left: -1px
 
+						content: ''
+
+						background-color: $background
+
 				&_point
-					padding: 20px 30px
 					position: relative
-					width: 50%
 					left: 0
+
 					box-sizing: border-box
-					font-size: 2rem
+					width: 50%
+					padding: 20px 30px
+
 					text-align: center
+
 					border-radius: 75px
 					box-shadow: 0px 0px 30px 0px rgba(24,23,51,0.3)
-						
+
+					font-size: 2rem
+
 					&::after
-						content: ''
 						position: absolute
+						z-index: 1
+						top: 50%
+						right: -15.5px
+
 						width: 25px
 						height: 25px
-						right: -17px
-						background-color: white
-						border: 3px solid $accent-red
-						top: 50%
 						margin-top: -15.5px
+
+						content: ''
+
+						border: 3px solid $accent-red
 						border-radius: 50%
-						z-index: 1
-						right: -15.5px
+						background-color: white
 
 					&-year
 						font-family: fcb-semibold
-
-					&title
 
 					&:nth-child(2n)
 						left: 50%
@@ -193,4 +272,199 @@ h1, h2, h3, h4, h5, h6
 
 		.last-victory
 			&__container
-				
+				width: 75%
+				margin: 0 auto
+				margin-top: 50px
+				padding-bottom: 50px
+
+				box-shadow: 0px 0px 30px 0px rgba(24,23,51,0.3)
+
+			&__header
+				display: flex
+				align-items: center
+
+				height: 75px
+				padding: 0 25px
+
+				text-transform: uppercase
+
+				color: $text
+				background: $accent-blue
+
+				font-family: fcb-extrabold
+				font-size: 2rem
+				line-height: 1
+
+				&_date-day
+					font-size: 5rem
+
+				&_date-dateinfo
+					display: flex
+					flex-direction: column
+					justify-content: center
+
+					margin-left: 15px
+
+					line-height: 0.9
+					
+				&_date-month
+					font-family: fcb-light
+
+			&__content
+				display: flex
+				align-items: center
+				justify-content: center
+
+				padding: 50px
+
+				&_team-home, &_team-away
+					&-image
+						width: 75px
+						height: 75px
+
+				&_info
+					display: flex
+					align-items: center
+					flex-direction: column
+
+					color: $grey
+
+				&_competition
+					&-image
+						width: 75px
+
+				&_minutes
+					margin-top: 15px
+
+					font-size: 1.3rem
+
+				&_score
+					display: flex
+					align-items: center
+					justify-content: center
+
+					width: 100px
+					height: 50px
+					margin-top: 20px
+
+					color: #fff
+					background: $accent-blue
+
+					font-family: fcb-extrabold
+					font-size: 3.5rem
+
+					.dash
+						margin: 0 10px
+
+				&_teams-name
+					margin-top: 25px
+
+					font-size: 1.5rem
+
+				&_teamnames-home, &_teamnames-away
+					color: $background
+
+					font-family: fcb-extrabold
+					font-size: 2.5rem
+
+				&_stadium
+					margin-top: 15px
+
+					font-size: 1.3rem
+
+			&__footer
+				display: flex
+				justify-content: center
+
+				&_report
+					width: 175px
+					height: 40px
+
+					transition: all 0.5s ease
+					text-align: center
+					text-transform: uppercase
+
+					background: $accent-blue
+
+					font-size: 1.5rem
+					line-height: 40px
+
+					&:hover
+						cursor: pointer
+
+						background: $accent-red
+
+//Footer
+.footer
+	position: relative
+
+	height: 95px
+
+	background: $background
+
+	&::after
+		position: absolute
+		bottom: 0
+		left: 0
+
+		display: block
+
+		width: 100%
+		height: 10px
+
+		content: ''
+
+		background: linear-gradient(90deg,#cd122d 0,#154284)
+
+	.wrapper
+		display: flex
+		align-items: center
+		justify-content: space-between
+
+		height: 85px
+
+		.logo
+			display: flex
+			align-items: center
+			justify-content: center
+
+			.link
+				display: flex
+
+			&__image
+				width: 200px
+
+				fill: $text
+
+		.navigation
+			.list
+				display: flex
+
+				&__item
+					display: flex
+					align-items: center
+
+					height: 100%
+
+					transition: all 0.5s ease
+					text-align: center
+
+					&::after
+						margin: 0 10px
+
+						content: '|'
+
+					&:last-child
+						&::after
+							margin: 0
+
+							content: ''
+
+					.link
+						text-transform: uppercase
+
+						font-family: fcb-semibold
+						font-size: 1.6rem
+
+						&:hover
+							cursor: pointer
