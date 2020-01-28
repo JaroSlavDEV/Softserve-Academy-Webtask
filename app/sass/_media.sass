@@ -1,15 +1,291 @@
-@media (min-width: 576px)
-    .wrapper
-        max-width: 540px
+// @media (min-width: 576px)
+//     .wrapper
+//         max-width: 540px
 
-@media (min-width: 768px)
-    .wrapper
-        max-width: 720px
+// @media (min-width: 768px)
+//     .wrapper
+//         max-width: 720px
 
-@media (min-width: 992px)
+// @media (min-width: 992px)
+//     .wrapper
+//         max-width: 960px
+
+// @media (min-width: 1200px)
+//     .wrapper
+//         max-width: 1140px
+
+@media (max-width: 1200px)
+    .wrapper
+        max-width: 1140px
+
+    .main-news
+        .wrapper
+            .news__container
+                justify-content: space-around
+                width: 90%
+
+    .main-сontacts
+        .contacts__container_info
+            width: 100%
+
+        .contacts__container_map
+            width: 100%
+            height: 450px
+            margin-top: 50px
+
+            #map
+                width: 99%
+
+@media (max-width: 992px)
+    html
+        font-size: 9px
+
     .wrapper
         max-width: 960px
 
-@media (min-width: 1200px)
+    .header
+        height: 65px
+
+        & + .first-screen
+            padding-top: 65px
+
+        .wrapper
+            .navigation
+                width: 77%
+
+                .list__item
+                    height: 65px
+                    line-height: 65px
+
+                    .dropdown-list
+                        min-width: 175%
+
+            .logo
+                width: 23%
+
+            .logo__image
+                padding: 0 10px
+
+    .main
+        padding: 65px 0 81.25px
+
+        .wrapper
+            .section
+                padding-top: 65px
+
+            .history
+                padding-top: 0
+
+            .history__timeline
+                margin-top: 65px
+
+            .history__timeline_point-title
+                overflow: hidden
+                white-space: nowrap
+                text-overflow: ellipsis
+
+    .game-detail__container, .last-victory__container, .next-game__container
+        width: 90%
+
+    .footer
+        height: 85px
+
+        &:after
+            height: 7px
+
+        .wrapper
+            height: 78px
+
+            .logo
+                width: 23%
+
+            .logo__image
+                width: calc(100% - 20px)
+
+    .main-news
+        .wrapper
+            .news__container_item
+                width: 300px
+
+@media (max-width: 768px)
+    html
+        font-size: 8px
+
     .wrapper
-        max-width: 1140px
+        max-width: 720px
+
+    .header
+        height: 55px
+
+        & + .first-screen
+            padding-top: 55px
+
+        .wrapper
+            justify-content: space-between
+            align-items: center
+            height: 100%
+
+            .navigation
+                display: none
+
+            .burger-menu
+                order: 1
+                width: 20px
+
+                &_item
+                    height: 2px
+                    background: #fff
+                    border-radius: 50%
+
+            .logo
+                width: 165px
+                 order: 2
+
+            .logo__image
+                padding: 0
+
+    .main
+        padding: 55px 0 68.75px
+
+    .game-detail__container, .last-victory__container, .next-game__container
+        width: 100%
+
+    .footer
+        height: 75px
+
+        .wrapper
+            height: 70px
+            justify-content: center
+
+            .logo
+                width: 165px
+
+            .logo__image
+                padding: 0
+                width: 100%
+
+            .navigation
+                display: none
+
+        &:after
+            height: 5px
+
+    .main-news 
+        .wrapper 
+            .news__container_item
+                width: 350px
+
+@media (max-width: 576px)
+    .wrapper
+        max-width: 540px
+
+    .header 
+        .wrapper 
+            .logo
+                width: 130px
+
+    .first-screen__title
+        font-size: 6rem
+
+    .first-screen__motto
+        font-size: 3rem
+
+    .main 
+        .wrapper 
+            .section__title
+                font-size: 4rem
+
+            .history__timeline_point
+                width: 100%
+                z-index: 10
+                margin-top: 50px
+                background: #fff
+
+                &:last-child
+                    &::after
+                        display: none
+
+                &:after
+                    top: auto
+                    bottom: -15.5px
+                    right: 50%
+                    margin-right: -15.5px
+
+                &:nth-child(2n)
+                    left: 0
+
+                    &:after
+                        left: auto
+
+    .footer
+        .wrapper 
+            .logo
+                width: 130px
+
+    .last-victory__content, .next-game__content
+        flex-wrap: wrap
+        justify-content: space-around
+
+    .last-victory__content_team-home, .next-game__content_team-home
+        order: 1
+    
+    .last-victory__content_team-away, .next-game__content_team-away
+        order: 2
+
+    .last-victory__content_info, .next-game__content_info
+        order: 3
+        width: 100%
+        margin-top: 25px
+        text-align: center
+
+    .last-victory__content_score, .next-game__content_score
+        order: 1
+
+    .last-victory__content_teams-name, .next-game__content_teams-name
+        order: 2
+
+    .last-victory__content_minutes, .next-game__content_minutes
+        order: 3
+
+    .last-victory__content_stadium, .next-game__content_stadium
+        order: 4
+    
+    .last-victory__content_competition, .next-game__content_competition
+        order: 5
+        margin-top: 30px
+
+    .main-admin 
+        .admin__new-news_container
+            &::after
+                width: 98.5%
+                height: 99%
+    
+    .main-сontacts 
+        .contacts__container_map 
+            #map
+                height: 99%
+                width: 98.5%
+
+    .main-news 
+        .wrapper 
+            .news__container_item
+                width: 100%
+
+    .main-raitings 
+        .wrapper 
+            .raitings__container
+                overflow: auto
+
+            .raitings__table 
+                width: 720px
+
+                .table__head_ceil
+                    word-break: normal
+    
+    .main-calendar 
+        .wrapper 
+            .calendar__container
+                overflow: auto
+
+                .calendar__table
+                    width: 720px
