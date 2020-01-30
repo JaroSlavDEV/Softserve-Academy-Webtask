@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-
+	// Admin image
 	const newImage = document.querySelector('.admin__new-news_form-image');
 	const containerImage = document.querySelector('.admin__new-news_container-image');
 
@@ -10,10 +10,35 @@ document.addEventListener("DOMContentLoaded", function () {
 			containerImage.src = '';
 			return 0;
 		}
-			
+
 		containerImage.src = URL.createObjectURL(file)
 	});
 
+	// Burger toggle
+	const burgerButton = document.querySelector('.burger-menu');
+	const body = document.querySelector('body');
+
+	burgerButton.addEventListener('click', function () {
+		body.classList.toggle('mobile-menu__open');
+	});
+
+	document.addEventListener('click', function (event) {
+		const current = event.target;
+
+		if (body.classList.contains('mobile-menu__open') && current.classList.contains('link') && !current.nextElementSibling) {
+			event.preventDefault();
+
+			setTimeout(function () {
+				window.location.replace(current.href);
+			}, 700);
+		}
+
+		if (body.classList.contains('mobile-menu__open') && current.classList.contains('link') && current.nextElementSibling && current.nextElementSibling.classList.contains('dropdown-list')) {
+			event.preventDefault();
+
+			current.nextElementSibling.classList.toggle('active');
+		}
+	});
 });
 
 let map, marker;

@@ -6,12 +6,18 @@
 //GENERAL STYLES//
 //////////////////
 
+*
+	-webkit-tap-highlight-color: transparent
+	-moz-tap-highlight-color: transparent
+	-o-tap-highlight-color: transparent
+	tap-highlight-color: transparent
+
 html
 	font-size: 10px
 
 body
 	min-width: 320px
-
+	
 	color: $text
 
 	font-family: fcb-regular, Arial, Helvetica Neue, Helvetica, sans-serif
@@ -393,7 +399,7 @@ input, textarea, button
 	mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/urban-sprite.png")
 	-webkit-mask-size: 3000% 100%
 	mask-size: 3000% 100%
-
+	
 	&:hover
 		animation: mask-position-end 0.7s steps(29) forwards
 
@@ -669,7 +675,6 @@ input, textarea, button
 								height: 0
 
 								content: ''
-								transition: all 0.5s ease
 								transition: all 0.5s ease
 
 								opacity: 0
