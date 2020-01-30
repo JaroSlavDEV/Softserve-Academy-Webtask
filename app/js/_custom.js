@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		containerImage.src = URL.createObjectURL(file)
 	});
 
-	// Burger toggle
+	// Burger
 	const burgerButton = document.querySelector('.burger-menu');
 	const body = document.querySelector('body');
 
@@ -25,18 +25,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.addEventListener('click', function (event) {
 		const current = event.target;
 
-		if (body.classList.contains('mobile-menu__open') && current.classList.contains('link') && !current.nextElementSibling) {
+		// Mobile menu
+		if (body.classList.contains('mobile-menu__open') && current.classList.contains('link')) {
 			event.preventDefault();
 
-			setTimeout(function () {
-				window.location.replace(current.href);
-			}, 700);
-		}
+			if (!current.nextElementSibling) {
+				setTimeout(function () {
+					window.location.replace(current.href);
+				}, 700);
+			}
 
-		if (body.classList.contains('mobile-menu__open') && current.classList.contains('link') && current.nextElementSibling && current.nextElementSibling.classList.contains('dropdown-list')) {
-			event.preventDefault();
-
-			current.nextElementSibling.classList.toggle('active');
+			if (current.nextElementSibling && current.nextElementSibling.classList.contains('dropdown-list')) {
+				current.nextElementSibling.classList.toggle('active');
+			}
 		}
 	});
 });

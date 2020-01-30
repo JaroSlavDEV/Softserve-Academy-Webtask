@@ -4,21 +4,26 @@
 
     .main-news
         .wrapper
-            .news__container
-                justify-content: space-around
-                width: 90%
+            .news
+                &__container
+                    justify-content: space-around
+
+                    width: 90%
 
     .main-сontacts
-        .contacts__container_info
-            width: 100%
+        .wrapper
+            .contacts
+                &__container
+                    &_info
+                        width: 100%
 
-        .contacts__container_map
-            width: 100%
-            height: 450px
-            margin-top: 50px
+                    &_map
+                        width: 100%
+                        height: 450px
+                        margin-top: 50px
 
-            #map
-                width: 99%
+                        #map
+                            width: 99%
 
 @media (max-width: 992px)
     html
@@ -26,6 +31,10 @@
 
     .wrapper
         max-width: 960px
+
+    .game-detail, .last-victory, .next-game
+        &__container
+            width: 90%
 
     .header
         height: 65px
@@ -37,18 +46,20 @@
             .navigation
                 width: 77%
 
-                .list__item
-                    height: 65px
-                    line-height: 65px
+                .list
+                    &__item
+                        height: 65px
 
-                    .dropdown-list
-                        min-width: 175%
+                        line-height: 65px
+
+                        .dropdown-list
+                            min-width: 175%
 
             .logo
                 width: 23%
 
-            .logo__image
-                padding: 0 10px
+                &__image
+                    padding: 0 10px
 
     .main
         padding: 65px 0 81.25px
@@ -60,16 +71,15 @@
             .history
                 padding-top: 0
 
-            .history__timeline
-                margin-top: 65px
+                &__timeline
+                    margin-top: 65px
 
-            .history__timeline_point-title
-                overflow: hidden
-                white-space: nowrap
-                text-overflow: ellipsis
+                    &_point
+                        &-title
+                            overflow: hidden
 
-    .game-detail__container, .last-victory__container, .next-game__container
-        width: 90%
+                            white-space: nowrap
+                            text-overflow: ellipsis
 
     .footer
         height: 85px
@@ -83,13 +93,15 @@
             .logo
                 width: 23%
 
-            .logo__image
-                width: calc(100% - 20px)
+                &__image
+                    width: calc(100% - 20px)
 
     .main-news
         .wrapper
-            .news__container_item
-                width: 300px
+            .news
+                &__container
+                    &_item
+                        width: 300px
 
 @media (max-width: 768px)
     html
@@ -98,24 +110,29 @@
     .wrapper
         max-width: 720px
 
-    .mobile-menu__open
-        overflow: hidden
+    .game-detail, .last-victory, .next-game
+        &__container
+            width: 100%
 
-        .header
-            .wrapper
-                .navigation
-                    width: 100%
+    .mobile-menu
+        &__open
+            overflow: hidden
 
-                .burger-menu
-                    .burger-menu__item
-                        &:nth-child(1)
-                            transform: rotate(-45deg) translate(-4px, 4px)
+            .header
+                .wrapper
+                    .navigation
+                        width: 100%
 
-                        &:nth-child(2)
-                            opacity: 0
+                    .burger-menu
+                        &__item
+                            &:nth-child(1)
+                                transform: rotate(-45deg) translate(-4px, 4px)
 
-                        &:nth-child(3)
-                            transform: rotate(45deg) translate(-4px, -5px)
+                            &:nth-child(2)
+                                opacity: 0
+
+                            &:nth-child(3)
+                                transform: rotate(45deg) translate(-4px, -5px)
 
     .header
         height: 55px
@@ -124,48 +141,62 @@
             padding-top: 55px
 
         .wrapper
-            justify-content: space-between
             align-items: center
+            justify-content: space-between
+
             height: 100%
 
             .navigation
                 position: fixed
+                z-index: 100
                 top: 55px
                 left: 0
-                height: calc(100vh - 55px)
-                width: 0
-                background: $background
-                z-index: 100
-                overflow-y: scroll
+
                 overflow-x: hidden
+                overflow-y: scroll
+
+                width: 0
+                height: calc(100vh - 55px)
+
                 transition: all 1s ease
 
+                background: $background
+
                 .list
-                    height: calc(100vh - 55px + 150px)
                     display: block
+
                     width: 100%
+                    height: calc(100vh - 55px + 150px)
 
                     &__item
                         display: block
+
                         width: 100%
                         height: auto
                         min-height: calc((100vh - 55px) / 6)
+
                         line-height: calc((100vh - 55px) / 6)
 
                         &:first-child
-                            &::after
+                            &:after
                                 top: 1px
+
                                 height: 1px
+
                                 background: linear-gradient(90deg,#cd122d 0,#154284)
 
-                        &::before
+                        &:before
                             position: absolute
                             bottom: 1px
                             left: 0
+
                             display: block
+
                             width: 100%
                             height: 1px
+
                             content: ''
+
                             background: linear-gradient(90deg,#cd122d 0,#154284)
 
                         &:hover
@@ -177,10 +208,13 @@
 
                         .dropdown-list
                             position: relative
-                            max-height: 0
+
                             display: block
-                            min-width: 100%
                             overflow: hidden
+
+                            min-width: 100%
+                            max-height: 0
+
                             transition: all 0.5s ease
 
                             &__item
@@ -190,32 +224,40 @@
                                     color: $accent-yellow
 
                                 &:first-child
-                                    &::after
-                                        visibility: visible
-                                        opacity: 1
-                                        z-index: 1
-                                        border: 0
+                                    &:after
                                         position: absolute
+                                        z-index: 1
                                         top: 1px
                                         left: 0
+
                                         display: block
+                                        visibility: visible
+
                                         width: 100%
                                         height: 1px
+
                                         content: ''
+
+                                        opacity: 1
+                                        border: 0
                                         background: linear-gradient(90deg,#cd122d 0,#154284)
 
-                                &::before
-                                    z-index: 1
+                                &:before
                                     position: absolute
+                                    z-index: 1
                                     bottom: 1px
                                     left: 0
+
                                     display: block
+
                                     width: 100%
                                     height: 1px
+
                                     content: ''
+
                                     background: linear-gradient(90deg,#cd122d 0,#154284)
 
-                                &::after
+                                &:after
                                     display: none
 
                             &.active
@@ -228,10 +270,6 @@
 
             .burger-menu
                 order: 1
-                outline: none
-
-                &:focus, &:active, &:hover
-                    outline: none
 
                 &:hover
                     cursor: pointer
@@ -250,161 +288,186 @@
                 &__item
                     width: 24px
                     height: 2px
-                    background: #fff
+
                     transition: all 0.5s ease
+
+                    background: #fff
 
                     &:nth-child(2)
                         margin: 4px 0
 
             .logo
-                width: 165px
                 order: 2
 
-            .logo__image
-                padding: 0
+                width: 165px
+
+                &__image
+                    padding: 0
 
     .main
         padding: 55px 0 68.75px
 
-    .game-detail__container, .last-victory__container, .next-game__container
-        width: 100%
-
     .footer
         height: 75px
-
-        .wrapper
-            height: 70px
-            justify-content: center
-
-            .logo
-                width: 165px
-
-            .logo__image
-                padding: 0
-                width: 100%
-
-            .navigation
-                display: none
 
         &:after
             height: 5px
 
+        .wrapper
+            justify-content: center
+
+            height: 70px
+
+            .logo
+                width: 165px
+
+                &__image
+                    width: 100%
+                    padding: 0
+
+            .navigation
+                display: none
+
     .main-news
         .wrapper
-            .news__container_item
-                width: 350px
+            .news
+                &__container
+                    &_item
+                        width: 350px
 
 @media (max-width: 576px)
     .wrapper
         max-width: 540px
+
+    .game-detail, .last-victory, .next-game
+        &__content
+            flex-wrap: wrap
+            justify-content: space-around
+
+            &_team-home
+                order: 1
+
+            &_team-away
+                order: 2
+
+            &_info
+                order: 3
+
+                width: 100%
+                margin-top: 25px
+
+                text-align: center
+
+            &_score
+                order: 1
+
+            &_teams-name
+                order: 2
+
+            &_minutes
+                order: 3
+
+            &_stadium
+                order: 4
+
+            &_competition
+                order: 5
+
+                margin-top: 30px
 
     .header
         .wrapper
             .logo
                 width: 130px
 
-    .first-screen__title
-        font-size: 6rem
+    .first-screen
+        &__title
+            font-size: 6rem
 
-    .first-screen__motto
-        font-size: 3rem
+        &__motto
+            font-size: 3rem
 
     .main
         .wrapper
-            .section__title
-                font-size: 4rem
+            .section
+                &__title
+                    font-size: 4rem
 
-            .history__timeline_point
-                width: 100%
-                z-index: 10
-                margin-top: 50px
-                background: #fff
+            .history
+                &__timeline
+                    &_point
+                        z-index: 10
 
-                &:last-child
-                    &::after
-                        display: none
+                        width: 100%
+                        margin-top: 50px
 
-                &:after
-                    top: auto
-                    bottom: -40px
-                    right: 50%
-                    margin-right: -15.5px
+                        background: #fff
 
-                &:nth-child(2n)
-                    left: 0
+                        &:nth-child(2n)
+                            left: 0
 
-                    &:after
-                        left: auto
+                            &:after
+                                left: auto
+
+                        &:last-child
+                            &:after
+                                display: none
+
+                        &:after
+                            top: auto
+                            right: 50%
+                            bottom: -40px
+
+                            margin-right: -15.5px
 
     .footer
         .wrapper
             .logo
                 width: 130px
 
-    .last-victory__content, .next-game__content
-        flex-wrap: wrap
-        justify-content: space-around
-
-    .last-victory__content_team-home, .next-game__content_team-home
-        order: 1
-
-    .last-victory__content_team-away, .next-game__content_team-away
-        order: 2
-
-    .last-victory__content_info, .next-game__content_info
-        order: 3
-        width: 100%
-        margin-top: 25px
-        text-align: center
-
-    .last-victory__content_score, .next-game__content_score
-        order: 1
-
-    .last-victory__content_teams-name, .next-game__content_teams-name
-        order: 2
-
-    .last-victory__content_minutes, .next-game__content_minutes
-        order: 3
-
-    .last-victory__content_stadium, .next-game__content_stadium
-        order: 4
-
-    .last-victory__content_competition, .next-game__content_competition
-        order: 5
-        margin-top: 30px
-
-    .main-admin
-        .admin__new-news_container
-            &::after
-                width: 98.5%
-                height: 99%
-
-    .main-сontacts
-        .contacts__container_map
-            #map
-                height: 99%
-                width: 98.5%
-
     .main-news
         .wrapper
-            .news__container_item
-                width: 100%
-
-    .main-raitings
-        .wrapper
-            .raitings__container
-                overflow: auto
-
-            .raitings__table
-                width: 720px
-
-                .table__head_ceil
-                    word-break: normal
+            .news
+                &__container
+                    &_item
+                        width: 100%
 
     .main-calendar
         .wrapper
-            .calendar__container
-                overflow: auto
+            .calendar
+                &__container
+                    overflow: auto
 
-                .calendar__table
+                &__table
                     width: 720px
+
+    .main-сontacts
+        .wrapper
+            .contacts
+                &__container
+                    &_map
+                        #map
+                            width: 98.5%
+                            height: 99%
+
+    .main-admin
+        .wrapper
+            .admin
+                &__new-news
+                    &_container
+                        &:after
+                            width: 98.5%
+                            height: 99%
+
+    .main-raitings
+        .wrapper
+            .raitings
+                &__container
+                    overflow: auto
+
+                &__table
+                    width: 720px
+
+                    .table__head
+                        &_ceil
+                            word-break: normal
