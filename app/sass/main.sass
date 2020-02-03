@@ -17,7 +17,7 @@ html
 
 body
 	min-width: 320px
-	
+
 	color: $text
 
 	font-family: fcb-regular, Arial, Helvetica Neue, Helvetica, sans-serif
@@ -399,7 +399,7 @@ input, textarea, button
 	mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/urban-sprite.png")
 	-webkit-mask-size: 3000% 100%
 	mask-size: 3000% 100%
-	
+
 	&:hover
 		animation: mask-position-end 0.7s steps(29) forwards
 
@@ -1075,9 +1075,17 @@ input, textarea, button
 				margin-top: 75px
 
 				&_form
+					&-name
+						width: 100%
+						height: 50px
+						padding: 10px
+
+						border: 2px solid $accent-blue
+
 					&-text
 						width: 100%
 						height: 100px
+						margin-top: 50px
 						padding: 10px
 
 						border: 2px solid $accent-blue
