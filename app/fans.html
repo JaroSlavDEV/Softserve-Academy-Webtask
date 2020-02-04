@@ -257,9 +257,9 @@
                 </div>
 
                 <div class="fans__new-appeal">
-                    <form action="#" class="fans__new-appeal_form">
-                        <input class="fans__new-appeal_form-name" type="text" placeholder="Write name..." />
-                        <textarea class="fans__new-appeal_form-text" placeholder="Write an appeal..."></textarea>
+                    <form class="fans__new-appeal_form">
+                        <input class="fans__new-appeal_form-name" type="text" placeholder="Write name..." required maxlength="50" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,50}$"/>
+                        <textarea class="fans__new-appeal_form-text" placeholder="Write an appeal..." required maxlength="750"></textarea>
                         <button class="fans__new-appeal_form-add button-gradient">
                             Add appeal
                         </button>
@@ -347,6 +347,8 @@
             </nav>
         </div>
     </footer>
+
+    <div class="snackbar success snackbar__new-appeal_success">Success! The appeal was added.</div>
 
     <script src="js/scripts.min.js"></script>
 </body>

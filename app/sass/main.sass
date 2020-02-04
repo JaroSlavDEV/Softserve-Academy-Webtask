@@ -58,6 +58,9 @@ input, textarea, button
 	&:focus
 		outline: none
 
+		&:invalid
+			border: 2px solid $accent-red!important
+
 //Sprite with teams without svg
 .icn-club-badge-30
 	display: inline-block
@@ -365,6 +368,69 @@ input, textarea, button
 					transform: scale(0)
 
 					background: linear-gradient(180deg,#cd122d 0,#154284)
+
+// Default snackbar
+.snackbar
+	position: fixed
+	z-index: 100
+	bottom: 30px
+	left: 50%
+
+	visibility: hidden
+
+	min-width: 250px
+	padding: 16px
+
+	transform: translate(-50%)
+	text-align: center
+	text-transform: uppercase
+
+	color: $accent-yellow
+	border: 2px solid $accent-yellow
+	border-radius: 2px
+	background: $accent-blue
+
+	font-family: fcb-semibold
+
+	&.show
+		visibility: visible
+
+		animation: fadein 0.5s, fadeout 0.5s 2.5s
+
+//Animation fadein
+@keyframes fadein
+	from
+		bottom: 0 
+
+		opacity: 0
+		
+	to
+		bottom: 30px 
+
+		opacity: 1
+
+//Animation fadeout
+@keyframes fadeout
+	from
+		bottom: 30px 
+
+		opacity: 1
+
+	to
+		bottom: 0 
+
+		opacity: 0
+
+//Animation opacity
+@keyframes fadein-opacity
+	from
+		opacity: 0
+		
+	to
+		opacity: 1
+
+.fadein-opacity
+	animation: fadein-opacity 1s
 
 //Animation for changing mask-position
 @keyframes mask-position-start
@@ -1237,13 +1303,20 @@ input, textarea, button
 								font-size: 5rem
 
 				&_form
-					&-image
-						display: block
-						visibility: hidden
+					position: relative
 
-						width: 0
-						height: 0
-						margin-top: 50px
+					&-image
+						position: absolute
+						top: 0
+						left: calc(50% - 0.5px)
+
+						display: block
+
+						width: 1px
+						height: 1px
+						margin-top: 45px
+
+						opacity: 0
 
 						& + label
 							display: block
@@ -1252,6 +1325,7 @@ input, textarea, button
 							justify-content: center
 
 							margin: 0 auto
+							margin-top: 50px
 
 							background: #000
 

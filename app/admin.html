@@ -120,13 +120,14 @@
                         <img src="" alt="New image" class="admin__new-news_container-image" />
                         <div class="blank">Image</div>
                     </div>
-                    <form action="#" class="admin__new-news_form">
+                    <form class="admin__new-news_form">
                         <input class="admin__new-news_form-image" type="file" id="admin__new-news_form-image"
-                            accept="image/*" />
+                            accept="image/*" required />
                         <label for="admin__new-news_form-image" class="button-gradient">Choose an image</label>
 
-                        <input class="admin__new-news_form-title" type="text" placeholder="News title..." />
-                        <textarea class="admin__new-news_form-text" placeholder="News text..."></textarea>
+                        <input class="admin__new-news_form-title" type="text" placeholder="News title..." required
+                            maxlength="100" />
+                        <textarea class="admin__new-news_form-text" placeholder="News text..." required></textarea>
                         <button class="admin__new-news_form-add button-gradient">
                             Add news
                         </button>
@@ -214,6 +215,8 @@
             </nav>
         </div>
     </footer>
+
+    <div class="snackbar success snackbar__new-news_success">Success! The news was added.</div>
 
     <script src="js/scripts.min.js"></script>
 </body>

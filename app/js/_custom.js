@@ -1,4 +1,5 @@
 const body = document.querySelector('body');
+const fields = document.querySelectorAll('input, textarea');
 
 const burgerButton = document.querySelector('.burger-menu');
 
@@ -7,13 +8,17 @@ const containerImageAdmin = document.querySelector('.admin__new-news_container-i
 
 const fieldNewNameFans = document.querySelector('.fans__new-appeal_form-name');
 const fieldNewTextFans = document.querySelector('.fans__new-appeal_form-text');
-const buttonAddNewAppealFans = document.querySelector('.fans__new-appeal_form-add');
+const formAddNewAppealFans = document.querySelector('.fans__new-appeal_form');
 const containerRecordsFans = document.querySelector('.fans__container');
+const snackbarNewAppealSuccess = document.querySelector('.snackbar__new-appeal_success');
 
+const fieldNewImageAdmin = document.querySelector('.admin__new-news_form-image');
 const fieldNewTitleAdmin = document.querySelector('.admin__new-news_form-title');
 const fieldNewTextAdmin = document.querySelector('.admin__new-news_form-text');
-const buttonAddNewNewAdmin = document.querySelector('.admin__new-news_form-add');
+const formAddNewNewsAdmin = document.querySelector('.admin__new-news_form');
 const containerRecordsNews = document.querySelector('.news__container');
+const containerNewImageAdmin = document.querySelector('.admin__new-news_container-image');
+const snackbarNewNewsSuccess = document.querySelector('.snackbar__new-news_success');
 
 document.addEventListener("DOMContentLoaded", function () {
 	// Mobile - toggle menu
@@ -23,14 +28,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	newImageAdmin && newImageAdmin.addEventListener('change', changeImageAdmin);
 
 	// Fans - add new appeal
-	buttonAddNewAppealFans && buttonAddNewAppealFans.addEventListener('click', addNewAppeal);
+	formAddNewAppealFans && formAddNewAppealFans.addEventListener('submit', addNewAppeal);
 
 	// Admin - add new new
-	buttonAddNewNewAdmin && buttonAddNewNewAdmin.addEventListener('click', addNewNew)
+	formAddNewNewsAdmin && formAddNewNewsAdmin.addEventListener('submit', addNewNew)
 
 	// Document deligation
 	document.addEventListener('click', documentDeligation);
-
+	
+	// Fields validation
+	fields.forEach(i => i.addEventListener('input', fieldValidationSuccess))
+	fields.forEach(i => i.addEventListener('invalid', fieldValidationFailure));
+	
 	//Test add new new
 	//testAddNewNew();
 });
@@ -53,26 +62,10 @@ const toggleMobileMenu = () => {
 };
 
 // Fans - add new appeal
-const validateAppealForm = () => {
-	const newName = fieldNewNameFans.value;
-	const newText = fieldNewTextFans.value;
-
-	if (newName === '' || newText === '') {
-		alert('Заповніть всі поля');
-
-		return 0;
-	}
-
-	return { newName, newText };
-};
-
-const clearAppealForm = () => {
-	fieldNewNameFans.value = '';
-	fieldNewTextFans.value = '';
-}
-
 const addNewAppeal = (event) => {
 	event.preventDefault();
+
+	if (!fieldNewNameFans.checkValidity() || !fieldNewTextFans.checkValidity()) return 0;
 
 	const time = new Date();
 	const timeOptions = {
@@ -83,13 +76,12 @@ const addNewAppeal = (event) => {
 		minute: '2-digit'
 	};
 
+	const newName = fieldNewNameFans.value;
+	const newText = fieldNewTextFans.value;
 	const newDate = time.toLocaleDateString(undefined, timeOptions);
 
-	const { newName, newText } = validateAppealForm();
-	if (newName === undefined || newText === undefined) return 0;
-
 	const item = document.createElement('div');
-	item.classList = 'fans__container_item';
+	item.classList = 'fans__container_item fadein-opacity';
 
 	const info = document.createElement('p');
 	info.classList = 'fans__container_item-info';
@@ -112,36 +104,25 @@ const addNewAppeal = (event) => {
 	footer.append(date);
 	footer.append(name);
 
-	clearAppealForm();
+	fieldNewNameFans.value = '';
+	fieldNewTextFans.value = '';
+
+	snackbarNewAppealSuccess.classList.add('show');
+	setTimeout(() => snackbarNewAppealSuccess.classList.remove('show'), 3000);
 };
 
 // Admin - add new new
-const validateNewForm = () => {
+const addNewNew = (event) => {
+	event.preventDefault();
+	
+	if (!fieldNewTitleAdmin.checkValidity() || !fieldNewTextAdmin.checkValidity()) return 0;
+
+	const newImage = fieldNewImageAdmin.value;
 	const newTitle = fieldNewTitleAdmin.value;
 	const newText = fieldNewTextAdmin.value;
 
-	if (newTitle === '' || newText === '') {
-		alert('Заповніть всі поля');
-
-		return 0;
-	}
-
-	return { newTitle, newText };
-};
-
-const clearNewForm = () => {
-	fieldNewTitleAdmin.value = '';
-	fieldNewTextAdmin.value = '';
-}
-
-const addNewNew = (event) => {
-	event.preventDefault();
-
-	const { newTitle, newText } = validateNewForm();
-	if (newTitle === undefined || newText === undefined) return 0;
-
 	// const item = document.createElement('a');
-	// item.classList = 'news__container_item';
+	// item.classList = 'news__container_item fadein-opacity';
 	// item.href = '#';
 
 	// const image = document.createElement('div');
@@ -169,12 +150,18 @@ const addNewNew = (event) => {
 	// info.append(title);
 	// info.append(description);
 
-	clearNewForm();
+	fieldNewImageAdmin.value = '';
+	fieldNewTitleAdmin.value = '';
+	fieldNewTextAdmin.value = '';
+	containerNewImageAdmin.src = '';
+
+	snackbarNewNewsSuccess.classList.add('show');
+	setTimeout(() => snackbarNewNewsSuccess.classList.remove('show'), 3000);
 };
 
 const testAddNewNew = () => {
 	const item = document.createElement('a');
-	item.classList = 'news__container_item';
+	item.classList = 'news__container_item fadein-opacity';
 	item.href = '#';
 
 	const image = document.createElement('div');
@@ -221,6 +208,29 @@ const documentDeligation = (event) => {
 
 		if (current.nextElementSibling && current.nextElementSibling.classList.contains('dropdown-list')) {
 			current.nextElementSibling.classList.toggle('active');
+		}
+	}
+};
+
+// Fields validation success
+const fieldValidationSuccess = (event) => {
+	const { target } = event;
+
+	target.setCustomValidity('');
+	target.checkValidity();
+};
+
+// Fields validation failure
+const fieldValidationFailure = (event) => {
+	const { target } = event;
+
+	if(target.validity.valueMissing) {
+		target.setCustomValidity('This value is required');
+	}
+
+	if(target.validity.patternMismatch) {
+		if(target === fieldNewNameFans) {
+			target.setCustomValidity('This value must begin from latin letter and include only latin letters, numbers or symbols - _ \\ .');
 		}
 	}
 };
