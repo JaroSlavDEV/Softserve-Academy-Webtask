@@ -16,7 +16,11 @@ html
 	font-size: 10px
 
 body
+	display: flex
+	flex-direction: column
+
 	min-width: 320px
+	min-height: 100vh
 
 	color: $text
 
@@ -24,11 +28,11 @@ body
 	font-size: 1.4rem
 
 .wrapper
+	box-sizing: border-box
 	width: 100%
 	max-width: 1140px
 	margin: 0 auto
 	padding: 0 15px
-	box-sizing: border-box
 
 ul
 	margin: 0
@@ -400,24 +404,24 @@ input, textarea, button
 //Animation fadein
 @keyframes fadein
 	from
-		bottom: 0 
+		bottom: 0
 
 		opacity: 0
-		
+
 	to
-		bottom: 30px 
+		bottom: 30px
 
 		opacity: 1
 
 //Animation fadeout
 @keyframes fadeout
 	from
-		bottom: 30px 
+		bottom: 30px
 
 		opacity: 1
 
 	to
-		bottom: 0 
+		bottom: 0
 
 		opacity: 0
 
@@ -425,7 +429,7 @@ input, textarea, button
 @keyframes fadein-opacity
 	from
 		opacity: 0
-		
+
 	to
 		opacity: 1
 
@@ -766,6 +770,7 @@ input, textarea, button
 			display: flex
 			align-items: center
 			justify-content: center
+
 			width: 21%
 
 			border-right: .1rem solid #29283d
@@ -815,6 +820,8 @@ input, textarea, button
 
 //Content
 .main
+	flex: 1
+
 	padding: 100px 0 125px
 
 	color: $background
@@ -944,6 +951,7 @@ input, textarea, button
 			display: flex
 			align-items: center
 			justify-content: center
+
 			width: 21%
 
 			.link
@@ -1005,6 +1013,11 @@ input, textarea, button
 				justify-content: space-between
 
 				margin: 0 auto
+
+				&:after
+					width: 350px
+
+					content: ""
 
 				&_item
 					display: block
@@ -1170,8 +1183,8 @@ input, textarea, button
 		.contacts
 			&__container
 				display: flex
-				justify-content: space-between
 				flex-wrap: wrap
+				justify-content: space-between
 
 				padding-top: 50px
 

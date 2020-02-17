@@ -3,9 +3,6 @@ const fields = document.querySelectorAll('input, textarea');
 
 const burgerButton = document.querySelector('.burger-menu');
 
-const newImageAdmin = document.querySelector('.admin__new-news_form-image');
-const containerImageAdmin = document.querySelector('.admin__new-news_container-image');
-
 const fieldNewNameFans = document.querySelector('.fans__new-appeal_form-name');
 const fieldNewTextFans = document.querySelector('.fans__new-appeal_form-text');
 const formAddNewAppealFans = document.querySelector('.fans__new-appeal_form');
@@ -25,23 +22,28 @@ document.addEventListener("DOMContentLoaded", function () {
 	burgerButton.addEventListener('click', toggleMobileMenu);
 
 	// Admin - change image
-	newImageAdmin && newImageAdmin.addEventListener('change', changeImageAdmin);
+	fieldNewImageAdmin && fieldNewImageAdmin.addEventListener('change', changeImageAdmin);
 
 	// Fans - add new appeal
 	formAddNewAppealFans && formAddNewAppealFans.addEventListener('submit', addNewAppeal);
 
-	// Admin - add new new
-	formAddNewNewsAdmin && formAddNewNewsAdmin.addEventListener('submit', addNewNew)
+	// Admin - add new news
+	formAddNewNewsAdmin && formAddNewNewsAdmin.addEventListener('submit', addNewNews)
 
 	// Document deligation
 	document.addEventListener('click', documentDeligation);
-	
+
 	// Fields validation
-	fields.forEach(i => i.addEventListener('input', fieldValidationSuccess))
-	fields.forEach(i => i.addEventListener('invalid', fieldValidationFailure));
-	
-	//Test add new new
-	//testAddNewNew();
+	fields.forEach(item => item.addEventListener('input', fieldValidationSuccess))
+	fields.forEach(item => item.addEventListener('invalid', fieldValidationFailure));
+
+	// Change network access
+	window.addEventListener('online', () => console.log('online'));
+	window.addEventListener('offline', () => console.log('offline'));
+
+	// Get appeals and news on load page
+	containerRecordsFans && getAppeals();
+	containerRecordsNews && getNews();
 });
 
 // Admin - change image
@@ -49,11 +51,11 @@ const changeImageAdmin = (event) => {
 	const file = event.target.files[0];
 
 	if (file && file['type'].split('/')[0] !== 'image') {
-		containerImageAdmin.src = '';
+		containerNewImageAdmin.src = '';
 		return 0;
 	}
 
-	containerImageAdmin.src = URL.createObjectURL(file);
+	containerNewImageAdmin.src = URL.createObjectURL(file);
 };
 
 // Mobile - toggle menu
@@ -61,25 +63,11 @@ const toggleMobileMenu = () => {
 	body.classList.toggle('mobile-menu__open');
 };
 
-// Fans - add new appeal
-const addNewAppeal = (event) => {
-	event.preventDefault();
+// Check for network access
+const isOnline = () => window.navigator.onLine;
 
-	if (!fieldNewNameFans.checkValidity() || !fieldNewTextFans.checkValidity()) return 0;
-
-	const time = new Date();
-	const timeOptions = {
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit'
-	};
-
-	const newName = fieldNewNameFans.value;
-	const newText = fieldNewTextFans.value;
-	const newDate = time.toLocaleDateString(undefined, timeOptions);
-
+// Fans - set new appeal
+const setNewAppeal = (newName, newText, newDate) => {
 	const item = document.createElement('div');
 	item.classList = 'fans__container_item fadein-opacity';
 
@@ -103,6 +91,29 @@ const addNewAppeal = (event) => {
 	item.append(footer);
 	footer.append(date);
 	footer.append(name);
+}
+
+// Fans - add new appeal
+const addNewAppeal = (event) => {
+	event.preventDefault();
+
+	if (!fieldNewNameFans.checkValidity() || !fieldNewTextFans.checkValidity()) return 0;
+
+	const time = new Date();
+	const timeOptions = {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit'
+	};
+
+	const newName = fieldNewNameFans.value;
+	const newText = fieldNewTextFans.value;
+	const newDate = time.toLocaleDateString(undefined, timeOptions);
+
+	postAppeal(newName, newText, newDate);
+	setNewAppeal(newName, newText, newDate);
 
 	fieldNewNameFans.value = '';
 	fieldNewTextFans.value = '';
@@ -111,44 +122,85 @@ const addNewAppeal = (event) => {
 	setTimeout(() => snackbarNewAppealSuccess.classList.remove('show'), 3000);
 };
 
-// Admin - add new new
-const addNewNew = (event) => {
+// Fans - get appeals
+const getAppeals = async () => {
+	let appeals;
+
+	if (isOnline()) {
+		const response = await fetch('http://localhost:3012/api/appeals');
+		appeals = await response.json();
+	} else {
+		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
+	}
+
+	appeals.forEach(item => {
+		const { name, text, date } = item;
+		setNewAppeal(name, text, date);
+	});
+}
+
+// Fans - post appeal
+const postAppeal = async (name, text, date) => {
+	let appeals;
+	const newAppeal = { name, text, date };
+
+	if (isOnline()) {
+		const response = await fetch('http://localhost:3012/api/appeals', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json;charset=utf-8' },
+			body: JSON.stringify(newAppeal)
+		});
+		appeals = await response.json();
+	} else {
+		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
+		appeals.push(newAppeal);
+		localStorage.setItem('appeals', JSON.stringify(appeals));
+	}
+}
+
+// Admin - set new news
+const setNewNews = (newImage, newTitle, newText) => {
+	const item = document.createElement('a');
+	item.classList = 'news__container_item fadein-opacity';
+	item.href = '#';
+
+	const image = document.createElement('div');
+	image.classList = 'news__container_item-image';
+
+	const img = document.createElement('img');
+	img.src = newImage;
+	img.alt = 'new';
+
+	const info = document.createElement('div');
+	info.classList = 'news__container_item-info';
+
+	const title = document.createElement('h3');
+	title.classList = 'news__container_item-title';
+	title.innerHTML = newTitle;
+
+	const description = document.createElement('p');
+	description.classList = 'news__container_item-description';
+	description.innerHTML = newText;
+
+	containerRecordsNews.append(item);
+	item.append(image);
+	item.append(info);
+	image.append(img);
+	info.append(title);
+	info.append(description);
+}
+
+// Admin - add new news
+const addNewNews = (event) => {
 	event.preventDefault();
-	
+
 	if (!fieldNewTitleAdmin.checkValidity() || !fieldNewTextAdmin.checkValidity()) return 0;
 
-	const newImage = fieldNewImageAdmin.value;
+	const newImage = containerNewImageAdmin;
 	const newTitle = fieldNewTitleAdmin.value;
 	const newText = fieldNewTextAdmin.value;
 
-	// const item = document.createElement('a');
-	// item.classList = 'news__container_item fadein-opacity';
-	// item.href = '#';
-
-	// const image = document.createElement('div');
-	// image.classList = 'news__container_item-image';
-
-	// const img = document.createElement('img');
-	// img.src = 'https://www.fcbarcelona.com/photo-resources/2020/01/02/4925ad07-1133-4531-bd9c-9713c3dc8bc9/mini__R5I2582.JPG?width=640&height=400';
-	// img.alt = 'new';
-
-	// const info = document.createElement('div');
-	// info.classList = 'news__container_item-info';
-
-	// const title = document.createElement('h3');
-	// title.classList = 'news__container_item-title';
-	// title.innerHTML = newTitle;
-
-	// const description = document.createElement('p');
-	// description.classList = 'news__container_item-description';
-	// description.innerHTML = newText;
-
-	// containerRecordsNews.append(item);
-	// item.append(image);
-	// item.append(info);
-	// image.append(img);
-	// info.append(title);
-	// info.append(description);
+	postNew(newImage, newTitle, newText);
 
 	fieldNewImageAdmin.value = '';
 	fieldNewTitleAdmin.value = '';
@@ -159,38 +211,56 @@ const addNewNew = (event) => {
 	setTimeout(() => snackbarNewNewsSuccess.classList.remove('show'), 3000);
 };
 
-const testAddNewNew = () => {
-	const item = document.createElement('a');
-	item.classList = 'news__container_item fadein-opacity';
-	item.href = '#';
+// Admin - get news
+const getNews = async () => {
+	let news;
 
-	const image = document.createElement('div');
-	image.classList = 'news__container_item-image';
+	if (isOnline()) {
+		const response = await fetch('http://localhost:3012/api/news');
+		news = await response.json();
+	} else {
+		news = JSON.parse(localStorage.getItem('news')) || [];
+	}
 
-	const img = document.createElement('img');
-	img.src = 'https://www.fcbarcelona.com/photo-resources/2020/01/02/4925ad07-1133-4531-bd9c-9713c3dc8bc9/mini__R5I2582.JPG?width=640&height=400';
-	img.alt = 'new';
+	news.forEach(item => {
+		const { image, title, text } = item;
+		setNewNews(image, title, text);
+	});
+}
 
-	const info = document.createElement('div');
-	info.classList = 'news__container_item-info';
+// Admin - convert new image to base64
+const getBase64Image = img => {
+	const imgCanvas = document.createElement("canvas");
+	const imgContext = imgCanvas.getContext("2d");
 
-	const title = document.createElement('h3');
-	title.classList = 'news__container_item-title';
-	title.innerHTML = 'Double session on Monday';
+	imgCanvas.width = img.width;
+	imgCanvas.height = img.height;
 
-	const description = document.createElement('p');
-	description.classList = 'news__container_item-description';
-	description.innerHTML = `Morning and afternoon workouts at the 
-		Ciutat Esportiva Joan Gamper included the return of Neto and 
-		the presence of several Barça B players`;
+	imgContext.drawImage(img, 0, 0, img.width, img.height);
 
-	containerRecordsNews.append(item);
-	item.append(image);
-	item.append(info);
-	image.append(img);
-	info.append(title);
-	info.append(description);
-};
+	const imgAsDataURL = imgCanvas.toDataURL("image/png");
+
+	return imgAsDataURL;
+}
+
+// Admin - post new
+const postNew = async (image, title, text) => {
+	let news;
+	const newNews = { image: getBase64Image(image), title, text };
+
+	if (isOnline()) {
+		const response = await fetch('http://localhost:3012/api/news', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json;charset=utf-8' },
+			body: JSON.stringify(newNews)
+		});
+		news = await response.json();
+	} else {
+		news = JSON.parse(localStorage.getItem('news')) || [];
+		news.push(newNews);
+		localStorage.setItem('news', JSON.stringify(news));
+	}
+}
 
 // Document deligation
 const documentDeligation = (event) => {
@@ -224,12 +294,12 @@ const fieldValidationSuccess = (event) => {
 const fieldValidationFailure = (event) => {
 	const { target } = event;
 
-	if(target.validity.valueMissing) {
+	if (target.validity.valueMissing) {
 		target.setCustomValidity('This value is required');
 	}
 
-	if(target.validity.patternMismatch) {
-		if(target === fieldNewNameFans) {
+	if (target.validity.patternMismatch) {
+		if (target === fieldNewNameFans) {
 			target.setCustomValidity('This value must begin from latin letter and include only latin letters, numbers or symbols - _ \\ .');
 		}
 	}
