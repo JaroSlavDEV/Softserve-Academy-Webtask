@@ -9,7 +9,15 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const news = await New.create(req.body);
+  let news = [];
+
+  if (Array.isArray(req.body)) {
+    req.body.forEach(async item => news.push(await New.create(item)));
+
+  } else {
+    news.push(await New.create(req.body));
+  }
+
   return res.status(201).send({
     error: false,
     news

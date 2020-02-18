@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	burgerButton.addEventListener('click', toggleMobileMenu);
 
 	// Admin - change image
-	fieldNewImageAdmin && fieldNewImageAdmin.addEventListener('change', changeImageAdmin);
+	fieldNewImageAdmin && fieldNewImageAdmin.addEventListener('change', changeNewImageAdmin);
 
 	// Fans - add new appeal
 	formAddNewAppealFans && formAddNewAppealFans.addEventListener('submit', addNewAppeal);
@@ -34,12 +34,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.addEventListener('click', documentDeligation);
 
 	// Fields validation
-	fields.forEach(item => item.addEventListener('input', fieldValidationSuccess))
+	fields.forEach(item => item.addEventListener('input', fieldValidationSuccess));
 	fields.forEach(item => item.addEventListener('invalid', fieldValidationFailure));
 
 	// Change network access
-	window.addEventListener('online', () => console.log('online'));
-	window.addEventListener('offline', () => console.log('offline'));
+	window.addEventListener('online', changeNetworkToOnline);
 
 	// Get appeals and news on load page
 	containerRecordsFans && getAppeals();
@@ -47,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Admin - change image
-const changeImageAdmin = (event) => {
+const changeNewImageAdmin = (event) => {
 	const file = event.target.files[0];
 
 	if (file && file['type'].split('/')[0] !== 'image') {
@@ -65,6 +64,74 @@ const toggleMobileMenu = () => {
 
 // Check for network access
 const isOnline = () => window.navigator.onLine;
+
+const api = function () {
+	const url = 'http://localhost:3012/api';
+	let response;
+
+	const getAppeals = async function () {
+		response = await fetch(`${url}/appeals`);
+
+		return await response.json();
+	}
+
+	const postAppeal = async function (body) {
+		response = await fetch(`${url}/appeals`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json;charset=utf-8' },
+			body: JSON.stringify(body)
+		});
+
+		return await response.json();
+	}
+
+	const getNews = async function () {
+		response = await fetch(`${url}/news`);
+
+		return await response.json();
+	}
+
+	const postNew = async function (body) {
+		response = await fetch(`${url}/news`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json;charset=utf-8' },
+			body: JSON.stringify(body)
+		});
+
+		return await response.json();
+	}
+
+	return {
+		getAppeals,
+		postAppeal,
+		getNews,
+		postNew
+	}
+}
+
+// Change network from offline to online
+const changeNetworkToOnline = async () => {
+	const appeals = JSON.parse(localStorage.getItem('appeals')) || [];
+	const news = JSON.parse(localStorage.getItem('news')) || [];
+
+	appeals.length && await fetch('http://localhost:3012/api/appeals', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json;charset=utf-8' },
+		body: JSON.stringify(appeals)
+	});
+
+	news.length && await fetch('http://localhost:3012/api/news', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json;charset=utf-8' },
+		body: JSON.stringify(news)
+	});
+
+	localStorage.removeItem('appeals');
+	localStorage.removeItem('news');
+
+	containerRecordsFans && getAppeals();
+	containerRecordsNews && getNews();
+};
 
 // Fans - set new appeal
 const setNewAppeal = (newName, newText, newDate) => {
@@ -125,10 +192,11 @@ const addNewAppeal = (event) => {
 // Fans - get appeals
 const getAppeals = async () => {
 	let appeals;
+	containerRecordsFans.innerHTML = '';
 
 	if (isOnline()) {
-		const response = await fetch('http://localhost:3012/api/appeals');
-		appeals = await response.json();
+		appeals = await api().getAppeals();
+		
 	} else {
 		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
 	}
@@ -145,17 +213,15 @@ const postAppeal = async (name, text, date) => {
 	const newAppeal = { name, text, date };
 
 	if (isOnline()) {
-		const response = await fetch('http://localhost:3012/api/appeals', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify(newAppeal)
-		});
-		appeals = await response.json();
+		appeals = await api().postAppeal(newAppeal);
+
 	} else {
 		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
 		appeals.push(newAppeal);
 		localStorage.setItem('appeals', JSON.stringify(appeals));
 	}
+
+	console.log(appeals);
 }
 
 // Admin - set new news
@@ -214,10 +280,11 @@ const addNewNews = (event) => {
 // Admin - get news
 const getNews = async () => {
 	let news;
+	containerRecordsNews.innerHTML = '';
 
 	if (isOnline()) {
-		const response = await fetch('http://localhost:3012/api/news');
-		news = await response.json();
+		news = await api().getNews();
+
 	} else {
 		news = JSON.parse(localStorage.getItem('news')) || [];
 	}
@@ -249,17 +316,15 @@ const postNew = async (image, title, text) => {
 	const newNews = { image: getBase64Image(image), title, text };
 
 	if (isOnline()) {
-		const response = await fetch('http://localhost:3012/api/news', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify(newNews)
-		});
-		news = await response.json();
+		news = await api().postNew(newNews);
+
 	} else {
 		news = JSON.parse(localStorage.getItem('news')) || [];
 		news.push(newNews);
 		localStorage.setItem('news', JSON.stringify(news));
 	}
+
+	console.log(news);
 }
 
 // Document deligation
@@ -430,3 +495,5 @@ function initMap() {
 		map: map
 	});
 };
+
+

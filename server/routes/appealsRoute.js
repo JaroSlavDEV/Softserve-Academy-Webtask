@@ -9,7 +9,15 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const appeals = await Appeal.create(req.body);
+  let appeals = [];
+
+  if(Array.isArray(req.body)) {
+    req.body.forEach(async item => appeals.push(await Appeal.create(item)));
+
+  } else {
+    appeals.push(await Appeal.create(req.body));
+  }
+
   return res.status(201).send({
     error: false,
     appeals
