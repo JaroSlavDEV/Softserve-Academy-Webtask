@@ -6,7 +6,7 @@ const newsRoute = require('./routes/newsRoute');
 
 const app = express();
 
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
