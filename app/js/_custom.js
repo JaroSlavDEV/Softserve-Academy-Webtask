@@ -65,6 +65,74 @@ const toggleMobileMenu = () => {
 // Check for network access
 const isOnline = () => window.navigator.onLine;
 
+// Check if we should use local storage or IndexedDB
+const useLocalStorage = true;
+
+///////////////////////////////
+
+class IndexedDB {
+	constructor(nameDB, objStoresDB) {
+		this._openRequest = indexedDB.open(nameDB, 1);
+
+		this._openRequest.onupgradeneeded = () => {
+			this._db = this._openRequest.result;
+
+			objStoresDB.forEach(store => {
+				if (!this._db.objectStoreNames.contains(store)) {
+					this._db.createObjectStore(store, { keyPath: 'id', autoIncrement: true });
+				}
+			});
+		};
+
+		this._openRequest.onsuccess = () => {
+			this._db = this._openRequest.result;
+
+			this._db.onerror = function (event) {
+				const request = event.target;
+				console.log('Error', request.error);
+			};
+
+			this._db.onversionchange = function () {
+				this._db.close();
+				alert('База даних застаріла, будь ласка, перезавантажте сторінку.');
+			};
+
+			// for(let store of this._db.objectStoreNames) {
+			// 	this.getStore(store)
+			// }
+		};
+
+		this._openRequest.onerror = function () {
+			console.error('Error', this._openRequest.error);
+		};
+	}
+
+	getStore = (name) => {
+		const transaction = this._db.transaction(name);
+		const store = transaction.objectStore(name);
+		const request = store.getAll();
+
+		request.onsuccess = function (event) {
+			console.log(event.target.result);
+		}
+	}
+
+	addItemToStore = (name, item) => {
+		const transaction = this._db.transaction(name, 'readwrite');
+		const store = transaction.objectStore(name);
+		const request = store.add(item);
+
+		request.onsuccess = function (event) {
+			console.log(event.target.result);
+		}
+	}
+}
+
+const database = new IndexedDB('FCBarcelonaDB', ['appeals', 'news']);
+
+///////////////////////////////
+
+// Api REST for interaction client and server
 const api = function () {
 	const url = 'http://localhost:3012/api';
 	let response;
@@ -194,9 +262,11 @@ const getAppeals = async () => {
 	let appeals;
 	containerRecordsFans.innerHTML = '';
 
+	database.getStore('news');
+
 	if (isOnline()) {
 		appeals = await api().getAppeals();
-		
+
 	} else {
 		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
 	}
@@ -495,5 +565,3 @@ function initMap() {
 		map: map
 	});
 };
-
-
