@@ -17,6 +17,12 @@ const containerRecordsNews = document.querySelector('.news__container');
 const containerNewImageAdmin = document.querySelector('.admin__new-news_container-image');
 const snackbarNewNewsSuccess = document.querySelector('.snackbar__new-news_success');
 
+// Check for network access
+const isOnline = () => window.navigator.onLine;
+
+// Check if we should use local storage or IndexedDB
+const useLocalStorage = false;
+
 document.addEventListener("DOMContentLoaded", function () {
 	// Mobile - toggle menu
 	burgerButton.addEventListener('click', toggleMobileMenu);
@@ -40,9 +46,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Change network access
 	window.addEventListener('online', changeNetworkToOnline);
 
-	// Get appeals and news on load page
-	containerRecordsFans && getAppeals();
-	containerRecordsNews && getNews();
+	// Network access 'online'
+	if(isOnline()) {
+		// Send info to server
+		changeNetworkToOnline();
+	} else {
+		// Get appeals and news on load page
+		containerRecordsFans && getAppeals();
+		containerRecordsNews && getNews();
+	}
 });
 
 // Admin - change image
@@ -62,75 +74,66 @@ const toggleMobileMenu = () => {
 	body.classList.toggle('mobile-menu__open');
 };
 
-// Check for network access
-const isOnline = () => window.navigator.onLine;
-
-// Check if we should use local storage or IndexedDB
-const useLocalStorage = true;
-
-///////////////////////////////
-
+// Class for indexedDb
 class IndexedDB {
-	constructor(nameDB, objStoresDB) {
-		this._openRequest = indexedDB.open(nameDB, 1);
-
-		this._openRequest.onupgradeneeded = () => {
-			this._db = this._openRequest.result;
-
-			objStoresDB.forEach(store => {
-				if (!this._db.objectStoreNames.contains(store)) {
-					this._db.createObjectStore(store, { keyPath: 'id', autoIncrement: true });
-				}
-			});
-		};
-
-		this._openRequest.onsuccess = () => {
-			this._db = this._openRequest.result;
-
-			this._db.onerror = function (event) {
-				const request = event.target;
-				console.log('Error', request.error);
-			};
-
-			this._db.onversionchange = function () {
-				this._db.close();
-				alert('База даних застаріла, будь ласка, перезавантажте сторінку.');
-			};
-
-			// for(let store of this._db.objectStoreNames) {
-			// 	this.getStore(store)
-			// }
-		};
-
-		this._openRequest.onerror = function () {
-			console.error('Error', this._openRequest.error);
-		};
+	constructor(nameDB, storesDB) {
+		this.nameDB = nameDB;
+		this.storesDB = storesDB;
 	}
 
-	getStore = (name) => {
-		const transaction = this._db.transaction(name);
-		const store = transaction.objectStore(name);
-		const request = store.getAll();
+	async init() {
+		try {
+			this.db = await idb.open(this.nameDB, 1, upgradeDB => {
+				this.storesDB.forEach(store => {
+					if (!upgradeDB.objectStoreNames.contains(store)) {
+						upgradeDB.createObjectStore(store, { keyPath: 'id', autoIncrement: true });
+					}
+				});
+			});
 
-		request.onsuccess = function (event) {
-			console.log(event.target.result);
+		} catch (e) {
+			console.log("Error", e);
 		}
 	}
 
-	addItemToStore = (name, item) => {
-		const transaction = this._db.transaction(name, 'readwrite');
-		const store = transaction.objectStore(name);
-		const request = store.add(item);
+	getStore(name) {
+		try {
+			const transaction = this.db.transaction(name);
+			const store = transaction.objectStore(name);
+			const result = store.getAll();
 
-		request.onsuccess = function (event) {
-			console.log(event.target.result);
+			return result;
+
+		} catch (e) {
+			console.log("Error", e);
+		}
+	}
+
+	addItemToStore(name, item) {
+		try {
+			const transaction = this.db.transaction(name, 'readwrite');
+			const store = transaction.objectStore(name);
+			store.add(item);
+
+		} catch (e) {
+			console.log("Error", e);
+		}
+	}
+
+	clearStore(name) {
+		try {
+			const transaction = this.db.transaction(name, 'readwrite');
+			const store = transaction.objectStore(name);
+			store.clear();
+
+		} catch (e) {
+			console.log("Error", e);
 		}
 	}
 }
 
+// Create database in indexedDb
 const database = new IndexedDB('FCBarcelonaDB', ['appeals', 'news']);
-
-///////////////////////////////
 
 // Api REST for interaction client and server
 const api = function () {
@@ -179,8 +182,17 @@ const api = function () {
 
 // Change network from offline to online
 const changeNetworkToOnline = async () => {
-	const appeals = JSON.parse(localStorage.getItem('appeals')) || [];
-	const news = JSON.parse(localStorage.getItem('news')) || [];
+	let appeals, news;
+
+	if (useLocalStorage) {
+		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
+		news = JSON.parse(localStorage.getItem('news')) || [];
+
+	} else {
+		await database.init();
+		appeals = await database.getStore('appeals');
+		news = await database.getStore('news');
+	}
 
 	appeals.length && await fetch('http://localhost:3012/api/appeals', {
 		method: 'POST',
@@ -194,9 +206,16 @@ const changeNetworkToOnline = async () => {
 		body: JSON.stringify(news)
 	});
 
-	localStorage.removeItem('appeals');
-	localStorage.removeItem('news');
+	if (useLocalStorage) {
+		localStorage.removeItem('appeals');
+		localStorage.removeItem('news');
 
+	} else {
+		await database.init();
+		await database.clearStore('appeals');
+		await database.clearStore('news');
+	}
+	
 	containerRecordsFans && getAppeals();
 	containerRecordsNews && getNews();
 };
@@ -262,13 +281,17 @@ const getAppeals = async () => {
 	let appeals;
 	containerRecordsFans.innerHTML = '';
 
-	database.getStore('news');
-
 	if (isOnline()) {
 		appeals = await api().getAppeals();
 
 	} else {
-		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
+		if (useLocalStorage) {
+			appeals = JSON.parse(localStorage.getItem('appeals')) || [];
+
+		} else {
+			await database.init();
+			appeals = await database.getStore('appeals');
+		}
 	}
 
 	appeals.forEach(item => {
@@ -279,19 +302,22 @@ const getAppeals = async () => {
 
 // Fans - post appeal
 const postAppeal = async (name, text, date) => {
-	let appeals;
 	const newAppeal = { name, text, date };
 
 	if (isOnline()) {
-		appeals = await api().postAppeal(newAppeal);
+		await api().postAppeal(newAppeal);
 
 	} else {
-		appeals = JSON.parse(localStorage.getItem('appeals')) || [];
-		appeals.push(newAppeal);
-		localStorage.setItem('appeals', JSON.stringify(appeals));
-	}
+		if (useLocalStorage) {
+			const appeals = JSON.parse(localStorage.getItem('appeals')) || [];
+			appeals.push(newAppeal);
+			localStorage.setItem('appeals', JSON.stringify(appeals));
 
-	console.log(appeals);
+		} else {
+			await database.init();
+			await database.addItemToStore('appeals', newAppeal);
+		}
+	}
 }
 
 // Admin - set new news
@@ -356,7 +382,13 @@ const getNews = async () => {
 		news = await api().getNews();
 
 	} else {
-		news = JSON.parse(localStorage.getItem('news')) || [];
+		if (useLocalStorage) {
+			news = JSON.parse(localStorage.getItem('news')) || [];
+
+		} else {
+			await database.init();
+			news = await database.getStore('news');
+		}
 	}
 
 	news.forEach(item => {
@@ -382,19 +414,22 @@ const getBase64Image = img => {
 
 // Admin - post new
 const postNew = async (image, title, text) => {
-	let news;
 	const newNews = { image: getBase64Image(image), title, text };
 
 	if (isOnline()) {
-		news = await api().postNew(newNews);
+		await api().postNew(newNews);
 
 	} else {
-		news = JSON.parse(localStorage.getItem('news')) || [];
-		news.push(newNews);
-		localStorage.setItem('news', JSON.stringify(news));
-	}
+		if (useLocalStorage) {
+			const news = JSON.parse(localStorage.getItem('news')) || [];
+			news.push(newNews);
+			localStorage.setItem('news', JSON.stringify(news));
 
-	console.log(news);
+		} else {
+			await database.init();
+			await database.addItemToStore('news', newNews);
+		}
+	}
 }
 
 // Document deligation
