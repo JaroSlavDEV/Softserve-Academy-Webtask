@@ -6,12 +6,12 @@ https://jaroslavdev.github.io/Softserve-Academy-Webtask/app/
 
 [root/server] npm install
 
-# Start project <dev>
+# Start project - dev
 [root] gulp
   
 [root/server] npm server
 
-# Start project <production>
+# Start project - production
 Database
 1. Go to MongoDB Atlas
 2. Choose your Cluster
