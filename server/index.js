@@ -19,7 +19,8 @@ app.use('/api/appeals', appealsRoute);
 app.use('/api/news', newsRoute);
 
 mongoose
-  .connect('mongodb://localhost:27017/FCBarcelonaDB', { useNewUrlParser: true, useUnifiedTopology: true })
+  // .connect('mongodb://localhost:27017/FCBarcelonaDB', { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect('mongodb+srv://user:user@cluster-c6wpi.mongodb.net/test?retryWrites=true&w=majority', { dbName: 'FCBarcelonaDB', useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('connection to database established');
   })
