@@ -28,7 +28,7 @@ mongoose
     console.log(`db error ${err.message}`);
   });
 
-const PORT = 3012;
-app.listen(PORT, () => {
+const PORT = 5000;
+app.listen(process.env.PORT || PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

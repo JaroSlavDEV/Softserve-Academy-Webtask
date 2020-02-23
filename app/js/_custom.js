@@ -137,7 +137,8 @@ const database = new IndexedDB('FCBarcelonaDB', ['appeals', 'news']);
 
 // Api REST for interaction client and server
 const api = function () {
-	const url = 'http://localhost:3012/api';
+	// const url = 'http://localhost:3012/api';
+	const url = 'https://fathomless-meadow-46405.herokuapp.com/api';
 	let response;
 
 	const getAppeals = async function () {
