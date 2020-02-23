@@ -21,7 +21,11 @@ const snackbarNewNewsSuccess = document.querySelector('.snackbar__new-news_succe
 const isOnline = () => window.navigator.onLine;
 
 // Check if we should use local storage or IndexedDB
-const useLocalStorage = false;
+const storageTrigger = JSON.parse(localStorage.getItem('useLocalStorage'));
+const useLocalStorage = (typeof storageTrigger === 'boolean') ? storageTrigger : true;
+
+// Set useLocalStorage to local storage
+localStorage.setItem('useLocalStorage', String(useLocalStorage));
 
 document.addEventListener("DOMContentLoaded", function () {
 	// Mobile - toggle menu
@@ -137,7 +141,7 @@ const database = new IndexedDB('FCBarcelonaDB', ['appeals', 'news']);
 
 // Api REST for interaction client and server
 const api = function () {
-	// const url = 'http://localhost:3012/api';
+	// const url = 'http://localhost:5000/api';
 	const url = 'https://fathomless-meadow-46405.herokuapp.com/api';
 	let response;
 
