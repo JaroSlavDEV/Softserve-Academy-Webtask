@@ -27,10 +27,10 @@ Server [root/server]
 6. git push heroku master
 
 Client [root]
-3. git init
-4. git add .
-5. git commit -am <COMMIT_MESSAGE>
-6. git push origin master
+1. git init
+2. git add .
+3. git commit -am <COMMIT_MESSAGE>
+4. git push origin master
 
 # Services
 Database - MongoDB Atlas
