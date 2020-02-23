@@ -195,17 +195,8 @@ const changeNetworkToOnline = async () => {
 		news = await database.getStore('news');
 	}
 
-	appeals.length && await fetch('http://localhost:3012/api/appeals', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json;charset=utf-8' },
-		body: JSON.stringify(appeals)
-	});
-
-	news.length && await fetch('http://localhost:3012/api/news', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json;charset=utf-8' },
-		body: JSON.stringify(news)
-	});
+	appeals.length && await api().postAppeal(appeals);
+	news.length && await api().postNew(news);
 
 	if (useLocalStorage) {
 		localStorage.removeItem('appeals');
