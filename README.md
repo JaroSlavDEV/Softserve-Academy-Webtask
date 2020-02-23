@@ -3,10 +3,12 @@ https://jaroslavdev.github.io/Softserve-Academy-Webtask/app/
 
 # Installation 
 [root] npm install
+
 [root/server] npm install
 
 # Start project <dev>
 [root] gulp
+  
 [root/server] npm server
 
 # Start project <production>
@@ -32,5 +34,7 @@ Client [root]
 
 # Services
 Database - MongoDB Atlas
+
 Server - Heroku
+
 Client - GitHub Pages
